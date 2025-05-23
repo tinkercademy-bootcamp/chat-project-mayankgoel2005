@@ -14,11 +14,36 @@
 
 - Compile the TCP client and server using `g++` from command line.
 - What are the most important command line arguments to learn for `g++`?
+  - -o <OutputFile> : Specifies the name of the output file
+  - -c : Compiles our files without linking
+  - -Wall : Enables all compiler warnings.
+  - -Wextra : Enables some additional warnings
+  - -O<n> : Sets the optimisation level to n
+  - -std=<standard> : Specifies the C++ standard
 - What is the difference between debug vs release versions?
+  - Debug Version :
+    - Includes debugging info
+    - Has no optimisations
+    - Has additional checks to find bugs
+    - It is slower and larger, but better for debugging
+  - Release Version :
+    - It is optimised wrt size and speed
+    - It has no debugging info and runtime checks
+    - It is faster and smaller, but harder to debug
 - What are the tradeoffs between debug and release versions?
+  - Answered above
 - What arguments would you use in a debug build?
+  - -g
+  - -Wall , -Wextra
+  - DDEBUG
 - What about for release?
+  - O3
+  - -Wno
+  - DNDEBUG
 - What other kinds of build types are useful?
+  - Testing build : For unit testing
+  - Coverage build : Use --coverage to generate coverage report
+  - Profile Build : For analysing performance (function calls, etc)
 
 ## Learn Basics of Make
 
@@ -34,20 +59,47 @@
   - Change your Makefile such that `make clean` will remove `build/` and all
     its contents
 - What are the most important command line arguments to learn for make?
+  - -n : Prints commands that would be executed without actually running them
+  - -C \<dir\> : Changes to the specified directory before running make
+  - -B : Forces a rebuild of all targets
 - What are the most important directives to learn about in Makefile?
+  - .PHONY : Declares the targets that are not actual files
+  - all : Common default target that builds everything
+  - clean : Target to remove current builds
 - What are the most important commands to implement in your Makefile?
+  - all : Common default target that builds everything
+  - clean : Target to remove current builds
+  - test : Runs unit tests
+  - debug : Builds project with debug flags
 - Which ones are essential, which ones are nice to haves?
+  - Essential : all, clean
+  - Debug : test, debug, release
 
 ## Learn Basics of Git
 
 - Read through the code in `src/`
 - Answer any `#Questions` as a comment
+  - Done!
 - Commit and push your changes to git
+  - Done!
 - Each commit should be responding to a single task or question
 - Why is it important to keep your commit to a single task or question?
+  - Easier to understand what I changed in that particular commit
 - Is it better to have a lot of very small commits, or one big commit when 
   everything is working?
+  - Better to have multiple small commits, so we can later underatnd the purpose each small change, and revert individual changes if needed
 - What are the most important commands to know in git?
+  - init : Initialise a rew repo
+  - clone : Clone existing repo
+  - add <file> : Stage changes to local for next commit
+  - commit -m "message" : Coomits staged changes as a new node to the local
+  - push : Push local changes to a remote repo
+  - status : Shows status of working dir and staging area
+  - checkout <branch> : Switch to different branch
+  - merge <branch> : Merge branch into current branch
+  - pull : Fetch and integrate changes from remote
+  - diff : Show changes between commits/branches
+  - stash : Temporarily stash changes
 
 ## Introduction to Sockets
 
