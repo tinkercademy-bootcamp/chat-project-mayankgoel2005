@@ -1,8 +1,7 @@
 # Makefile
 
 CXX := g++
-CXXFLAGS := -Wall -Wextra -std=c++20 -g
-
+CXXFLAGS := -Wall -Wextra -std=c++20 -g -O3
 SRC_DIR := src
 BUILD_DIR := build
 
