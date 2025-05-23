@@ -34,7 +34,7 @@ int main() {
     return -1;
   }
   // Send message
-  send(my_sock, message.c_str(), message.size(), 0);
+  send(my_sock, message.c_str(), message.size()+1, 0);
   std::cout << "Sent: " << message << "\n";
   // Wait for reply
   ssize_t read_size = read(my_sock, buffer, kBufferSize);
