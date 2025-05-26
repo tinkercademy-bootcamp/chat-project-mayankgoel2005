@@ -12,6 +12,7 @@
   overview and protocol families
 - Or type `man 7 socket` in terminal
 - When would you want to use a `SOCK_RAW` stream?
+  - When you need direct access to lower-level network protocols, bypassing the standard transport layers like TCP and UDP.
 
 ### TCP and IP Protocols
 - [IPv4](https://www.rfc-editor.org/info/rfc791) - Internet Protocol 
@@ -25,16 +26,27 @@
 - [C++23 ISO standard draft](https://www.open-std.org/jtc1/sc22/wg21/docs/papers/2023/n4950.pdf) - 
   Working draft of the C++ language specification
 - Is the above the official C++23 spec? 
+  - No, the above is not the official C++23 spec
 - Where is the official C++23 spec?
+  - The official C++23 spec is published by ISO and is available on their website: [ISO C++23 Specification](https://www.iso.org/standard/79358.html).
 - Why was this link chosen instead?
+  - Because it provides free access to the working draft of the C++23 specification
 - Is this a helpful reference for learning C++?
-- Can the various implementations of C++ compilers be different from the
-  C++ standard?
+  - Yes, it is helpful for understanding features/specifications of the language. However, it may not be user-friendly for beginners.
+- Can the various implementations of C++ compilers be different from the C++ standard?
+  - Yes, C++ compilers can have differences due to extensions, optimizations, or incomplete support for the latest standard
+
 - What are the most widely used and most significant C++ compilers?
+  - GCC : Open-source and widely used on Linux
+  - Clang: Known for its modular design
+
 - Where is the equivalent spec for C++26?
+  - It is currently under development and can be found in the working drafts published by the ISO C++ committee. These drafts are available on the [ISO C++ Committee Papers](https://www.open-std.org/jtc1/sc22/wg21/) website.
 
 - Where do you find the spec for the HTTP protocol?
+  - In the RFC documents published by the IETF
 - What about HTTPS? Is there a spec for that protocol?
+  - Yes, HTTPS is specified as HTTP over TLS. The specifications for HTTPS can be found in the [RFC 9110](https://www.rfc-editor.org/info/rfc9110) for HTTP
 
 ## Introduction to C++ and Sockets Programming
 
