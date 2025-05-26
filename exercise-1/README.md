@@ -110,40 +110,75 @@
   `"hello message from the command prompt"` to the server
 - Commit your changes into git
 - What do all these headers do?
+  - `<arpa/inet.h>`: IP address conversion functions
+  - `<netinet/in.h>`: Internet address structures
+  - `<sys/socket.h>`: Socket functions/types
+  - `<sys/types.h>`: Basic system data types.
+  - `<unistd.h>`: POSIX functions
+
 - How do you find out which part of the below code comes from which header?
+  - Check the documentation or man pages for each function/type
+
 - How do you change the code so that you are sending messages to servers
   other than localhost?
+  - Change the server address in the client code from `"127.0.0.1"` to the IP address of the target server
+
 - How do you change the code to send to a IPv6 address instead of IPv4?
-- **Bonus**: How do you change the client code to connect by hostname instead
-  of IP address?
+  - Use `sockaddr_in6` instead of `sockaddr_in`, set `AF_INET6` as the address family, and use an IPv6 address
+
+- **Bonus**: How do you change the client code to connect by hostname instead of IP address?
+  - Use `getaddrinfo()` to resolve the hostname to an IP address, then use the returned address info to connect instead of hardcoding the IP address.
   
 ## Introduction to Memory Management
 
 - What is happening in line 26 of `tcp-echo-client.cc`? 
   `if (inet_pton(AF_INET, kServerAddress.c_str(), &address.sin_addr) <= 0) {`
+  - The code is converting the server's IPv4 address from string format to binary format using `inet_pton`
+
 - What is happening in line 31 of `tcp-echo-client.cc`?
   `if (connect(my_sock, (sockaddr *)&address, sizeof(address)) < 0) {`
+  - The code is trying to connect the client socket to the server using the address info. If `connect` returns a value less than 0, the connection failed.
+
 - What is the difference between a pointer and a reference?
+  - A pointer holds the memory address of another variable and can be reassigned or set to null.
+  - A reference is an alias for another variable, must be initialized when declared, cannot be changed to refer to something else or be null.
 - When is it better to use a pointer?
+  - When we need to allow null values, dynamic memory allocation, or want to change what the pointer points to at runtime
 - When is it better to use a reference?
+  - When you always want to refer to an existing variable, do not need null values, and do not need to change what is referenced
 - What is the difference between `std::string` and a C-style string?
+  - `std::string` is a C++ class that manages strings with built-in functions and automatic memory management.
+  - A C-style string is a null-terminated array of characters (`char*` or `char[]`) in C/C++.
 - What type is a C-style string?
+  - `char*` (pointer to char) OR `char[]` (array of chars)
 - What happens when you iterate a pointer?
+  - When you iterate a pointer, it moves to the next memory location based on the size of the data type it points to
 - What are the most important safety tips to know when using pointers?
+  - Initialize pointers before use.  
+  - Avoid dangling pointers by ensuring valid memory.  
+  - Free dynamically allocated memory to prevent leaks.  
+  - Be cautious with pointer arithmetic to avoid invalid accesses.
 
 ## Learn Basics of Creating a C++ Project in Your IDE
 
 - How do you compile and run your project in your IDE?
+  - In VS Code, use the built-in terminal to compile with `g++`
 
 ## Improving Interactions with LLMs
 
 - What is the most authoritative source of information about `socket()`
   from `<sys/socket.h>`?
-- What is the most authoritative source of information about the TCP and IP
-  protocols?
+- What is the most authoritative source of information about the TCP and IP protocols?
+  - POSIX man pages or the official POSIX specification.
+
 - What is the most authoritative source of information about the C++
   programming language?
-- What information can you find about using Markdown when structuring prompts 
-  to LLMs?
+  - `https://cppreference.com/`
+- What information can you find about using Markdown when structuring prompts to LLMs?
+  - Markdown helps structure prompts for LLMs by using headings, lists, and code blocks to organize information, improve readability and ensure clarity.
+
 - What is the difference between LLM and AI?
+  - LLM is a specific type of AI designed for NLP tasks, such as text generation and understanding.  
+  - AI is a broader field that includes various technologies, including ML, robotics, etc.
 - Is it grammatically correct in English to say "a LLM" or "an LLM"? Why?
+  - "An LLM", because LLM starts with a vowel sound
