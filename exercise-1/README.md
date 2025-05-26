@@ -105,6 +105,7 @@
 
 - Read the code in `src/tcp-echo-client.cc` and add a way to change the 
   message sent using command line arguments
+  - Done!
 - **Example**: `./client "hello message from the command prompt"` should send
   `"hello message from the command prompt"` to the server
 - Commit your changes into git
