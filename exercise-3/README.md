@@ -38,10 +38,9 @@
   - For example: `g++ -S -o output.s main.cpp`.
 - **Note**: You can save the generated assembly from Compiler Explorer
 - **Bonus**: Can you view assembly code using your IDE?
-- **Bonus**: How do you see the assembly when you step through each line in
-  debugging mode from your IDE?
-- [x86 assembly reference](http://ref.x86asm.net/) - Comprehensive reference 
-  for x86 assembly language instructions and syntax
+  - Yes, in VSCode, you can view assembly code by using the "Disassembly" view in the Debugger.
+- **Bonus**: How do you see the assembly when you step through each line in debugging mode from your IDE?
+  - In VSCode, start debugging, then right-click and select "Show Disassembly" to view the assembly alongside your source code as you step through each line.
 
 ## More About Memory Management
 
