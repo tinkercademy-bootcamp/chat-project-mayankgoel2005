@@ -54,10 +54,24 @@ int acceptConnection(int my_sock, sockaddr_in& address, socklen_t& addrlen) {
   return new_sock;
 }
 
+void handleClientCommunication(int new_sock) {
+  char buffer[kBufferSize] = {0};
+  // Wait for read
+  ssize_t read_size = read(new_sock, buffer, kBufferSize);
+  if (read_size > 0) {
+    std::cout << "Received: " << buffer << "\n";
+    // Send reply
+    send(new_sock, buffer, read_size, 0);
+    std::cout << "Echo message sent\n";
+  } else {
+    std::cerr << "Error reading from client\n";
+  }
+  close(new_sock);
+}
+
 int main() {
   sockaddr_in address;
   socklen_t addrlen = sizeof(address);
-  char buffer[kBufferSize] = {0};
 
   int my_sock = createAndSetupSocket(address);
   if (my_sock < 0) return -1;
@@ -75,15 +89,9 @@ int main() {
       close(my_sock);
       return -1;
     }
-    // Wait for read
-    ssize_t read_size = read(new_sock, buffer, kBufferSize);
-    std::cout << "Received: " << buffer << "\n";
-    // Send reply
-    send(new_sock, buffer, read_size, 0);
-    std::cout << "Echo message sent" << "\n";
+    handleClientCommunication(new_sock);
   }
-  // Close the socket
-  close(new_sock);
+
   close(my_sock);
   return 0;
 }
