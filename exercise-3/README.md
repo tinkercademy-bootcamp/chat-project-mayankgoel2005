@@ -56,7 +56,10 @@
   - Compiler Explorer shows how your code turns into assembly, so you can see what the computer actually does and how the code gets optimized. Debug mode helps by letting you run your code step by step, so you can watch how variables change, check memory, and see how the program flows while it's running.
 
 - What happens when you look at a `std::string` using the above methods?
+  - Using debug mode, you can inspect the internal structure of `std::string`, which typically includes a pointer to the character data, the size, and capacity.
+  
 - Where is the text in your `std::string`?
+  - The text in a `std::string` is typically stored in a dynamically allocated buffer on the heap. For small strings, some implementations use small string optimization (SBO) to store the text directly within the `std::string` object.
 - What is `std::optional`?
 - How do you find out the memory layout of a `std::optional`?
 - Read https://en.cppreference.com/w/cpp/memory#Smart_pointers - Guide to 
