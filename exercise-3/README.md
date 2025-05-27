@@ -68,9 +68,20 @@
 - Read https://en.cppreference.com/w/cpp/memory#Smart_pointers - Guide to 
   modern C++ memory management using smart pointers
 - Which pointer types are the most important to know about?
+  - Raw pointers (`*`) for low-level memory management.
+  - The following are inspired by Rust (or Rust was inspired by these):
+    - `std::unique_ptr` for exclusive ownership of resources.
+    - `std::shared_ptr` for shared ownership with reference counting.
+    - `std::weak_ptr` to avoid circular references with `std::shared_ptr`.
 - Which smart pointer should you use by default if you can?
+  - Use `std::unique_ptr` by default as it provides exclusive ownership, is lightweight, and avoids the overhead of reference counting.
 - Does changing your optimization level in `CXXFLAGS` from `-O0` to `-O3` have
   any impact on the answers to any of the above questions?
+  - Yes, `-O3` enables optimizations, which can:
+    - Change the assembly output in Compiler Explorer
+    - Reduce debug information visibility
+    - Affect runtime behavior like inlining and loop unrolling
+    - May also impact memory layout and performance analysis.
 
 ## More Thinking About Performance
 
