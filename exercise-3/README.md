@@ -27,7 +27,12 @@
   - The new approach improves maintainability and readability without significantly impacting performance.
 
 - What is happening here?
+  - The `check_error()` function abstracts error handling, reducing redundancy and improving maintainability by centralizing error-checking logic.
+
 - Can you think of any different approaches to this problem?
+  - Use macros or inline functions for error handling to reduce function call overhead.
+  - Use exceptions for error handling instead of return codes or manual checks.
+
 - How can you modify your Makefile to generate assembly code instead of
   compiled code?
 - **Note**: You can save the generated assembly from Compiler Explorer
