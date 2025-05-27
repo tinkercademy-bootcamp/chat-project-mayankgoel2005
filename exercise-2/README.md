@@ -37,7 +37,7 @@
   - Yes, C++ compilers can have differences due to extensions, optimizations, or incomplete support for the latest standard
 
 - What are the most widely used and most significant C++ compilers?
-  - GCC : Open-source and widely used on Linux
+  - G++ : Open-source and widely used on Linux
   - Clang: Known for its modular design
 
 - Where is the equivalent spec for C++26?
@@ -46,20 +46,26 @@
 - Where do you find the spec for the HTTP protocol?
   - In the RFC documents published by the IETF
 - What about HTTPS? Is there a spec for that protocol?
-  - Yes, HTTPS is specified as HTTP over TLS. The specifications for HTTPS can be found in the [RFC 9110](https://www.rfc-editor.org/info/rfc9110) for HTTP
+  - Yes, HTTPS is specified as HTTP over TLS. The HTTPS specifications can be found in the [RFC 9110](https://www.rfc-editor.org/info/rfc9110)
 
 ## Introduction to C++ and Sockets Programming
 
 - Read the code in `src/`
 - Are there any bugs in this code? 
+  - Yes, `tcp_echo_client.cc` should have `message.size()+1` in line 49
 - What can you do to identify if there are bugs in the code?
+  - Run gdb or the debugger on my IDE
 
 ## Refactoring: Extract Function
 
 - What is different in this code compared to exercise-1?
+  - This code is more modular
 - Is this code better or worse than exercise-1?
+  - This code is easier to read and debug
 - What are the tradeoffs compared to exercise-1?
+  - I think that would be that number of lines of code is larger, though I wouldnt really count it as a bad thing. Also, I would need to jump through multiple functions to get an idea of what's happening
 - Are you able to spot any mistakes or inconsistencies in the changes?
+  - Not that I could find
   
 ## Thinking About Performance
 
