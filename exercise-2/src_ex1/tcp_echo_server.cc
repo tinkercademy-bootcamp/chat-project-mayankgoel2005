@@ -4,11 +4,13 @@
 #include <sys/types.h>
 #include <unistd.h>
 
+const int kPort = 8080;
+const int kBufferSize = 1024;
+
+
 int main() {
-  const int kPort = 8080;
   sockaddr_in address;
   socklen_t addrlen = sizeof(address);
-  const int kBufferSize = 1024;
   char buffer[kBufferSize] = {0};
   int my_sock;
   int opt = 1;
