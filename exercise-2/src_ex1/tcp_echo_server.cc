@@ -36,6 +36,15 @@ int createAndSetupSocket(sockaddr_in& address) {
   return my_sock;
 }
 
+bool startListening(int my_sock) {
+  if (listen(my_sock, 3) < 0) {
+    std::cerr << "listen failed\n";
+    return false;
+  }
+  std::cout << "Server listening on port " << kPort << "\n";
+  return true;
+}
+
 int main() {
   sockaddr_in address;
   socklen_t addrlen = sizeof(address);
@@ -44,12 +53,10 @@ int main() {
   int my_sock = createAndSetupSocket(address);
   if (my_sock < 0) return -1;
 
-  // Start listening for incoming connections
-  if (listen(my_sock, 3) < 0) {
-    std::cerr << "listen failed\n";
+  if (!startListening(my_sock)) {
+    close(my_sock);
     return -1;
   }
-  std::cout << "Server listening on port " << kPort << "\n";
 
   // Accept incoming connection
   int new_sock;
