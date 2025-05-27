@@ -33,8 +33,9 @@
   - Use macros or inline functions for error handling to reduce function call overhead.
   - Use exceptions for error handling instead of return codes or manual checks.
 
-- How can you modify your Makefile to generate assembly code instead of
-  compiled code?
+- How can you modify your Makefile to generate assembly code instead of compiled code?
+  - Add the `-S` flag to the compiler command in the Makefile
+  - For example: `g++ -S -o output.s main.cpp`.
 - **Note**: You can save the generated assembly from Compiler Explorer
 - **Bonus**: Can you view assembly code using your IDE?
 - **Bonus**: How do you see the assembly when you step through each line in
