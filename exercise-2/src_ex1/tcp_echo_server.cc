@@ -7,38 +7,50 @@
 const int kPort = 8080;
 const int kBufferSize = 1024;
 
+int createAndSetupSocket(sockaddr_in& address) {
+  int my_sock;
+  int opt = 1;
+
+  // Creating socket file descriptor
+  if ((my_sock = socket(AF_INET, SOCK_STREAM, 0)) < 0) {
+    std::cerr << "Socket creation error\n";
+    return -1;
+  }
+
+  // Attaching socket to port
+  if (setsockopt(my_sock, SOL_SOCKET, SO_REUSEADDR | SO_REUSEPORT, &opt, sizeof(opt))) {
+    std::cerr << "setsockopt error\n";
+    return -1;
+  }
+
+  address.sin_family = AF_INET;
+  address.sin_addr.s_addr = INADDR_ANY;
+  address.sin_port = htons(kPort);
+
+  // Bind the socket to the network address and port
+  if (bind(my_sock, (sockaddr*)&address, sizeof(address)) < 0) {
+    std::cerr << "bind failed\n";
+    return -1;
+  }
+
+  return my_sock;
+}
 
 int main() {
   sockaddr_in address;
   socklen_t addrlen = sizeof(address);
   char buffer[kBufferSize] = {0};
-  int my_sock;
-  int opt = 1;
-  // Creating socket file descriptor
-  if ((my_sock = socket(AF_INET, SOCK_STREAM, 0)) < 0) {
-    std::cerr << "Socket creation erron\n";
-    return -1;
-  }
-  // Attaching socket to port
-  if (setsockopt(my_sock, SOL_SOCKET, SO_REUSEADDR | SO_REUSEPORT, &opt,
-                 sizeof(opt))) {
-    std::cerr << "setsockopt error\n";
-    return -1;
-  }
-  address.sin_family = AF_INET;
-  address.sin_addr.s_addr = INADDR_ANY;
-  address.sin_port = htons(kPort);
-  // Bind the socket to the network address and port
-  if (bind(my_sock, (sockaddr *)&address, sizeof(address)) < 0) {
-    std::cerr << "bind failed\n";
-    return -1;
-  }
+
+  int my_sock = createAndSetupSocket(address);
+  if (my_sock < 0) return -1;
+
   // Start listening for incoming connections
   if (listen(my_sock, 3) < 0) {
     std::cerr << "listen failed\n";
     return -1;
   }
   std::cout << "Server listening on port " << kPort << "\n";
+
   // Accept incoming connection
   int new_sock;
   while (true) {
