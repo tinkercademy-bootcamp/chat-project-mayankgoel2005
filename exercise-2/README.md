@@ -70,8 +70,12 @@
 ## Thinking About Performance
 
 - Does writing code this way have any impact on performance?
+  - The numerous function calls might add up to the stack memory. However, this should not have much effect unless the program is large.
 - What do we mean when we say performance?
+  - The speed of the code
 - How do we measure performance in a program?
+  - We can use a profiler like gprof
+  - We can also just calculate the time that code takes to run (using `time()`)
 
 ## Play with Git
 
@@ -82,17 +86,27 @@
 - Make sure to commit each change as small and self-contained commit
 - This will make it easier to revert your code if you need to
 - What is `git tag`? How is `git tag` different from `git branch`?
-- How can you use `git tag` and `git branch` to make programming easier and
-  more fun?
+  -`git tag` is used to create a fixed label on a specific commit. Tags are static and do not move.  
+  - `git branch` is a movable pointer to a commit. Branches can be updated as new commits are added.
+
+- How can you use `git tag` and `git branch` to make programming easier and more fun?
+  - `git tag` is often used for marking releases(version numbers)
+  - `git branch` is used for ongoing development. 
 
 ## Learn Basics of Debugging in Your IDE
 
 - How do you enable debug mode in your IDE?
+  - Using debug mode (CLion)
 - In debug mode, how do you add a watch?
+  - By using the watch button
 - In debug mode, how do you add a breakpoint?
+  - By clicking on the red button to the left of the line
 - In debug mode, how do you step through code?
+  - By using the step over function
 
 ### Memory Management and Debug Mode in Your IDE
 
 - How do you see the memory layout of a `std::string` from your IDE debug mode?
+  - It's visible in the memory section
 - How do you see the memory layout of a struct from your IDE debug mode?
+  - It's visible in the memory section
