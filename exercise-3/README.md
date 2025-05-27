@@ -51,8 +51,10 @@
   - `-fsanitize=address`: Enables AddressSanitizer to detect memory errors like buffer overflows.
   - `CXX_FLAGS`: Compiler flags used during the compilation process to control warnings, optimizations, and debugging.
   - `LD_FLAGS`: Linker flags used during the linking process to specify libraries or additional options for the linker.
-- With the new tool of the Compiler Explorer, and keeping in mind what you 
-  have learned about how to use debug mode
+
+- With the new tool of the Compiler Explorer, and keeping in mind what you have learned about how to use debug mode
+  - Compiler Explorer shows how your code turns into assembly, so you can see what the computer actually does and how the code gets optimized. Debug mode helps by letting you run your code step by step, so you can watch how variables change, check memory, and see how the program flows while it's running.
+
 - What happens when you look at a `std::string` using the above methods?
 - Where is the text in your `std::string`?
 - What is `std::optional`?
