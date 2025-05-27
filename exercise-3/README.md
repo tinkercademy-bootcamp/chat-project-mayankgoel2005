@@ -60,8 +60,11 @@
   
 - Where is the text in your `std::string`?
   - The text in a `std::string` is typically stored in a dynamically allocated buffer on the heap. For small strings, some implementations use small string optimization (SBO) to store the text directly within the `std::string` object.
+  
 - What is `std::optional`?
+  - `std::optional` is a C++ utility that represents an object that may or may not contain a value. It is useful for scenarios where a value might be absent, providing a safer alternative to using `nullptr`.
 - How do you find out the memory layout of a `std::optional`?
+  - Use `sizeof` and `alignof` to inspect the size and alignment of `std::optional`. You can also use a debugger or Compiler Explorer.
 - Read https://en.cppreference.com/w/cpp/memory#Smart_pointers - Guide to 
   modern C++ memory management using smart pointers
 - Which pointer types are the most important to know about?
