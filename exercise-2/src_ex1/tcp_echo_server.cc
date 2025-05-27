@@ -45,6 +45,15 @@ bool startListening(int my_sock) {
   return true;
 }
 
+int acceptConnection(int my_sock, sockaddr_in& address, socklen_t& addrlen) {
+  int new_sock = accept(my_sock, (struct sockaddr*)&address, &addrlen);
+  if (new_sock < 0) {
+    std::cerr << "accept error\n";
+    return -1;
+  }
+  return new_sock;
+}
+
 int main() {
   sockaddr_in address;
   socklen_t addrlen = sizeof(address);
@@ -61,9 +70,9 @@ int main() {
   // Accept incoming connection
   int new_sock;
   while (true) {
-    new_sock = accept(my_sock, (struct sockaddr *)&address, &addrlen);
+    new_sock = acceptConnection(my_sock, address, addrlen);
     if (new_sock < 0) {
-      std::cerr << "accept error\n";
+      close(my_sock);
       return -1;
     }
     // Wait for read
