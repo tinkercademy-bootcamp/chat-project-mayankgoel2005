@@ -21,8 +21,11 @@
 ## Introduction to Compiler Explorer
 
 - Try out the old `create_socket()` and the new `check_error()` and 
-  `create_socket()` in [Compiler Explorer](https://godbolt.org) - Interactive 
-  tool for exploring how C++ code compiles to assembly
+  `create_socket()` in [Compiler Explorer](https://godbolt.org) - Interactive tool for exploring how C++ code compiles to assembly
+  - The old `create_socket()` has inline error handling, leading to repetitive assembly instructions for error checks.
+  - The new `check_error()` centralizes error handling, reducing redundancy in the generated assembly.
+  - The new approach improves maintainability and readability without significantly impacting performance.
+
 - What is happening here?
 - Can you think of any different approaches to this problem?
 - How can you modify your Makefile to generate assembly code instead of
