@@ -5,10 +5,17 @@
 ## Re-using Code
 
 - Read the code in `src/tcp_echo_client.cc`
-- A new function `check_error()` has been created and `create_socket()` from 
-  exercise-2 has been refactored to make use of it
+- A new function `check_error()` has been created and `create_socket()` from exercise-2 has been refactored to make use of it
 - What are the benefits of writing code in this way?
+  - Improves readability by abstracting error handling.
+  - Reduces code duplication and ensures consistency.
+  - Simplifies debugging and testing by isolating error logic.
+  - Enhances maintainability by centralizing error handling.
+
 - Are there any costs to writing code like this?
+  - Slight overhead of function calls.
+  - May reduce clarity for very simple error checks.
+  - Requires discipline to ensure all errors are routed through `check_error`.
 - Apply `check_error` to all the code in `src/`
 
 ## Introduction to Compiler Explorer
