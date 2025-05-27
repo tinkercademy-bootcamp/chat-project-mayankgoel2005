@@ -1,7 +1,8 @@
 # Makefile
 
 CXX := g++
-CXXFLAGS := -Wall -Wextra -std=c++20 -g -O3
+CXXFLAGS := -Wall -Wextra -std=c++20 -g -O3 -fsanitize=address
+LD_FLAGS := -fsanitize=address
 SRC_DIR := src
 BUILD_DIR := build
 
@@ -19,10 +20,10 @@ $(BUILD_DIR):
 	mkdir -p $(BUILD_DIR)
 
 $(CLIENT_BIN): $(CLIENT_SRC) | $(BUILD_DIR)
-	$(CXX) $(CXXFLAGS) $< -o $@
+	$(CXX) $(CXXFLAGS) $< -o $@ $(LD_FLAGS)
 
 $(SERVER_BIN): $(SERVER_SRC) | $(BUILD_DIR)
-	$(CXX) $(CXXFLAGS) $< -o $@
+	$(CXX) $(CXXFLAGS) $< -o $@ $(LD_FLAGS)
 
 clean:
 	rm -rf $(BUILD_DIR)

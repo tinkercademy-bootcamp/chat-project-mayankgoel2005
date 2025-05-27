@@ -46,7 +46,11 @@
 
 - Make sure you have `-fsanitize=address` in both your `CXX_FLAGS` and 
   `LD_FLAGS` in your Makefile
+  - Done!
 - What do `-fsanitize=address`, `CXX_FLAGS` and `LD_FLAGS` mean?
+  - `-fsanitize=address`: Enables AddressSanitizer to detect memory errors like buffer overflows.
+  - `CXX_FLAGS`: Compiler flags used during the compilation process to control warnings, optimizations, and debugging.
+  - `LD_FLAGS`: Linker flags used during the linking process to specify libraries or additional options for the linker.
 - With the new tool of the Compiler Explorer, and keeping in mind what you 
   have learned about how to use debug mode
 - What happens when you look at a `std::string` using the above methods?
