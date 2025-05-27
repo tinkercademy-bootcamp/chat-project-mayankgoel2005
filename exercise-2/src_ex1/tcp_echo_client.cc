@@ -6,9 +6,7 @@
 #include <sys/types.h>
 #include <unistd.h>
 
-int main(int argc, char* argv[]) {
-  // #Question - are these the same type?
-  // No, string message is a C++ string, while "Hello from client" is a C string (char array)
+std::string getMessageFromArgs(int argc, char* argv[]) {
   std::string message = "Hello from client";
   if (argc > 1) {
     message = argv[1];
@@ -17,6 +15,27 @@ int main(int argc, char* argv[]) {
       message += argv[i];
     }
   }
+  return message;
+}
+
+
+int main(int argc, char* argv[]) {
+  // #Question - are these the same type?
+  // No, string message is a C++ string, while "Hello from client" is a C string (char array)
+
+
+  // std::string message = "Hello from client";
+  // if (argc > 1) {
+  //   message = argv[1];
+  //   for (int i = 2; i < argc; ++i) {
+  //     message += " ";
+  //     message += argv[i];
+  //   }
+  // }
+  std::string message = getMessageFromArgs(argc, argv);
+
+
+
   const int kPort = 8080;
   const std::string kServerAddress = "127.0.0.1";
   sockaddr_in address;
