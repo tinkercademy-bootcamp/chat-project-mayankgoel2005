@@ -69,6 +69,18 @@ void handleClientCommunication(int new_sock) {
   close(new_sock);
 }
 
+void runServer(int my_sock, sockaddr_in& address, socklen_t& addrlen) {
+  while (true) {
+    int new_sock = acceptConnection(my_sock, address, addrlen);
+    if (new_sock < 0) {
+      close(my_sock);
+      std::cerr << "Error accepting connection\n";
+      return;
+    }
+    handleClientCommunication(new_sock);
+  }
+}
+
 int main() {
   sockaddr_in address;
   socklen_t addrlen = sizeof(address);
@@ -81,16 +93,7 @@ int main() {
     return -1;
   }
 
-  // Accept incoming connection
-  int new_sock;
-  while (true) {
-    new_sock = acceptConnection(my_sock, address, addrlen);
-    if (new_sock < 0) {
-      close(my_sock);
-      return -1;
-    }
-    handleClientCommunication(new_sock);
-  }
+  runServer(my_sock, address, addrlen);
 
   close(my_sock);
   return 0;
