@@ -21,6 +21,7 @@
 
 - There are different ways namespace is being used in this exercise
 - Which way is better? What are the advantages and disadvantages?
+  - Using nested namespaces keeps the code organized and avoids name conflicts. However, it can make the code harder to read if overused.
 
 ## Abstracting Code into Classes
 
