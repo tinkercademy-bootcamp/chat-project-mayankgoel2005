@@ -24,15 +24,21 @@
   - This will build both the server and client binaries in the `build/` directory.
 - How would you compile using VS Code?
   - Use the `tasks.json` file in the `.vscode` folder to define build tasks.
-  - Press `Cmd+Shift+B` to run the default task
+  - Press `Cmd+Shift+B` to run the default task.
 
 ### Compiling vs Linking
 
 - What is the difference between compiling and linking in C++?
-- What is the difference between creating an executable and creating a 
-  library?
-- How do you compile a library, and then use that library to compile an
-  executable?
+  - Compiling: turns code into object files, checks for errors.
+  - Linking: combines object files, creates executable.
+
+- What is the difference between creating an executable and creating a library?
+  - Executable: runs directly, has `main()`.
+  - Library: reusable code, no `main()`.
+
+- How do you compile a library, and then use that library to compile an executable?
+  - Compile library: `g++ -c src/common.cpp -o build/common.o`
+\  - Use library: `g++ src/tcp_echo_server.cpp -Lbuild -lcommon -o build/server`
 
 ### Reminder 
 [Quickstart tutorial to make](https://makefiletutorial.com/) - Learn make 
