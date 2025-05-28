@@ -6,8 +6,22 @@
 
 - Move code that can be shared between `tcp_echo_server.cc` and 
   `tcp_echo_client.cc` to separate `.h` and `.cc` files
+  - Done!
 - How would you compile from the command line?
+  - For the server:
+    ```bash
+    g++ -Wall -Wextra -std=c++20 -g -O3 src/tcp_echo_server.cpp src/common.cpp -o build/server
+    ```
+  - For the client:
+    ```bash
+    g++ -Wall -Wextra -std=c++20 -g -O3 src/tcp_echo_client.cpp src/common.cpp -o build/client
+    ```
 - How would you compile using make?
+  - Run the following command:
+    ```bash
+    make
+    ```
+  - This will build both the server and client binaries in the `build/` directory.
 - How would you compile using VS Code?
 
 ### Compiling vs Linking
