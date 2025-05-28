@@ -38,7 +38,7 @@
 
 - How do you compile a library, and then use that library to compile an executable?
   - Compile library: `g++ -c src/common.cpp -o build/common.o`
-\  - Use library: `g++ src/tcp_echo_server.cpp -Lbuild -lcommon -o build/server`
+  - Use library: `g++ src/tcp_echo_server.cpp -Lbuild -lcommon -o build/server`
 
 ### Reminder 
 [Quickstart tutorial to make](https://makefiletutorial.com/) - Learn make 
@@ -46,7 +46,11 @@ fundamentals with practical examples and common patterns.
 
 ## Experiments in Performance
 
-- Is it better to have many small files spread across many directories, or
-  a few large files across fewer directories?
+- Is it better to have many small files spread across many directories, or a few large files across fewer directories?
+  - Small files: easier to manage, better for teamwork.
+  - Large files: faster to compile, simpler structure.
+  - Depends on project size and team needs.
 - Is there a difference in compilation time between the two?
+  - Yes, many small files may increase compilation time due to overhead, while few large files may compile faster.
 - How can you assess performance other than compilation speed?
+  - Consider code readability, maintainability, and how changes in one part of the code affect other parts.
