@@ -23,6 +23,8 @@
     ```
   - This will build both the server and client binaries in the `build/` directory.
 - How would you compile using VS Code?
+  - Use the `tasks.json` file in the `.vscode` folder to define build tasks.
+  - Press `Cmd+Shift+B` to run the default task
 
 ### Compiling vs Linking
 
