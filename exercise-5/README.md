@@ -4,14 +4,18 @@
 
 ## Comparing File Changes
 
-- What's an easy way to identify the changes in source code from one exercise
-  to another?
-    
+- What's an easy way to identify the changes in source code from one exercise to another?
+  - Use `diff` 
+
 ## Using Classes
 
 - Here is one way to separate out the code into multiple files
+  It makes the code easier to read and reuse. However, it can increase complexity when managing dependencies.
 - Is this the best way to do it? 
-- What are the advantages and disadvantages?
+  It depends on the project size. For small projects, it might be overkill, but for larger ones, it helps keep things organized.
+- What are the advantages and disadvantages?  
+  Advantages: Better organization, easier debugging.  
+  Disadvantages: Harder to manage for small projects, more files to track.
 
 ## Introduction to Namespace
 
