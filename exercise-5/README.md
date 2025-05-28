@@ -26,10 +26,18 @@
 ## Abstracting Code into Classes
 
 - Abstract the client and server logic into a `Client` and `Server` class
+  - Done!
 - **Note**: You don't have to use the code in this exercise as a starting point
 - You can use the code you wrote from previous exercises instead
 - How should you divide the code into files?
+  - I kept each class in its own header/implementation pair. For this, I used:
+    - Core networking functions in net/chat-sockets.{h,cc}
+    - Client class in client/client.{h,cc}
+    - Server class in server/server.{h,cc}
+    - Main executables in client-main.cc and server-main.cc
+
 - What namespace and directory structure should you use? Why?
+  - I used a nested namespace structure (tt::chat::client, tt::chat::server, tt::chat::net) that mirrors the directory structure (src/client, src/server, src/net). The directories group related files together.
 
 ## Programming Sense of Taste
 
