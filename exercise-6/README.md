@@ -9,7 +9,14 @@
   [More info here](https://github.com/gabime/spdlog) - Fast C++ logging 
   library with various sink types and formatting options
 - How do you compile this file using the `g++` CLI?
+  - After installing the spdlog library, run the following command:
+  ```
+  g++ -std=c++23 -Wall -Wextra -pedantic -I/usr/local/include src/spdlog-hello-world-main.cc -o spdlog-hello-world -lfmt
+  ```
 - What do you need to change in your makefile to use this library?
+  - Add `-I/usr/local/include` to CPPFLAGS
+  - Add `-lfmt` to LDFLAGS
+  - Create a build target for the spdlog-hello-world program
 - How many different ways can this library be added into your project?
 - What are the tradeoffs in the different ways?
 - Why are there so many different ways to do it?

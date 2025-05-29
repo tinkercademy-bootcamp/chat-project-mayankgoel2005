@@ -12,7 +12,7 @@ CXX_RELEASE_FLAGS :=-O3
 CXXFLAGS += $(CXX_DEBUG_FLAGS)
 
 # The linker flags. These are passed to the linker when we link our object files together.
-LDFLAGS := -fsanitize=address
+LDFLAGS := -fsanitize=address -lfmt
 
 BUILD_DIR := build
 SRC_DIR := src
@@ -39,15 +39,18 @@ INC_FLAGS := $(addprefix -I,$(INC_DIRS))
 # The -MMD and -MP flags together generate Makefiles for us!
 # See https://scottmcpeak.com/autodepend/autodepend.html for more information.
 # These files will have .d instead of .o as the output.
-CPPFLAGS := $(INC_FLAGS) -MMD -MP
+CPPFLAGS := $(INC_FLAGS) -MMD -MP -I/usr/local/include
 
-all: $(BUILD_DIR)/server $(BUILD_DIR)/client
+all: $(BUILD_DIR)/server $(BUILD_DIR)/client $(BUILD_DIR)/spdlog-hello-world
 	
 $(BUILD_DIR)/server: $(BUILD_DIR)/src/server-main.cc.o $(NON_MAIN_OBJS)
 	$(CXX) $(CPPFLAGS) $(CXXFLAGS) $(BUILD_DIR)/src/server-main.cc.o $(NON_MAIN_OBJS) -o $(BUILD_DIR)/server $(LDFLAGS)
 
 $(BUILD_DIR)/client: $(BUILD_DIR)/src/client-main.cc.o $(NON_MAIN_OBJS)
 	$(CXX) $(CPPFLAGS) $(CXXFLAGS) $(BUILD_DIR)/src/client-main.cc.o $(NON_MAIN_OBJS) -o $(BUILD_DIR)/client $(LDFLAGS)
+
+$(BUILD_DIR)/spdlog-hello-world: $(BUILD_DIR)/src/spdlog-hello-world-main.cc.o
+	$(CXX) $(CPPFLAGS) $(CXXFLAGS) $(BUILD_DIR)/src/spdlog-hello-world-main.cc.o -o $(BUILD_DIR)/spdlog-hello-world $(LDFLAGS)
 
 $(BUILD_DIR)/%.cc.o: %.cc
 	mkdir -p $(dir $@)
