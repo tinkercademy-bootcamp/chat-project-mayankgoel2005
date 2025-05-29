@@ -33,8 +33,25 @@
 ## Static Linking vs Dynamic Linking
 
 - What are the differences between static linking and dynamic linking?
+  - Static linking: Library code gets copied into the program file, making a larger but standalone executable
+  - Dynamic linking: Your program just contains references to libraries, which are loaded at runtime from the system
 - What are the tradeoffs?
+  - Static linking:
+    - Larger executable size but no dependency issues
+    - Good for program distribution
+    - Simpler but wastes disk space when multiple programs use the same library
+  - Dynamic linking: 
+    - Smaller executables and shared memory, but requires libraries to be installed on the target system
+    - Saves disk soace when multiple programs use the same library
 - How do you enable static linking or dynamic linking in your makefile?
+  - For static linking: Add `-static` to LDFLAGS
+    ```
+    LDFLAGS += -static
+    ```
+  - For dynamic linking: Default behavior
+    ```
+    LDFLAGS += -lfmt
+    ```
 
 ## Git Clone and Building from Source
 
