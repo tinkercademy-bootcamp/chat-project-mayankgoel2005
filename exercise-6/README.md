@@ -18,8 +18,17 @@
   - Add `-lfmt` to LDFLAGS
   - Create a build target for the spdlog-hello-world program
 - How many different ways can this library be added into your project?
+  - apt, brew (System Package Managers)
+  - Copy source files directly into project
+  - Link with pre-built library files
 - What are the tradeoffs in the different ways?
+  - System packages: Easy to install but might not have the latest version
+  - Source files in project: No external dependencies but increases project size
+  - Pre-built libraries: Fast to compile but might have compatibility issues
 - Why are there so many different ways to do it?
+  - C++ has no official package manager
+  - Different projects have different needs
+  - Some methods work better in certain environments
   
 ## Static Linking vs Dynamic Linking
 
