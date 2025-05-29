@@ -64,10 +64,15 @@
     - `/usr/lib`
     - `/usr/local/lib`
     - Directories specified with `-L`
-- How do you find out?
 
 ## C++ Package Managers
 
 - Why are there so many C++ package managers?
+  - C++ lacks an official standard package manager
+  - Different platforms have different needs (Windows, Linux, Mac)
 - Which one is the best one?
+  - There's no "best" package manager - it depends on your needs
+  - CMake is good for projects that need to work on different systems and use many libraries or tools.
 - Which are the most notable ways to manage the compilation of C++ projects?
+  - Makefiles: Simple but harder to maintain for complex projects
+  - CMake: Cross-platform tool that creates build files
