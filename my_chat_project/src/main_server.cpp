@@ -32,7 +32,7 @@ int create_listen_socket(int port) {
         return -1;
     }
 
-    if (listen(fd, 1) < 0) {
+    if (listen(fd, 10) < 0) {
         perror("listen");
         close(fd);
         return -1;
@@ -41,16 +41,40 @@ int create_listen_socket(int port) {
     return fd;
 }
 
-void wait_and_accept(int listen_fd) {
-    std::cout << "Server listening on port 8080\n";
-    int client_fd = accept(listen_fd, nullptr, nullptr);
-    if (client_fd < 0) {
-        perror("accept");
+ssize_t read_client_message(int client_fd, char* buffer, size_t bufsize) {
+    ssize_t total_read = 0;
+    while (total_read < static_cast<ssize_t>(bufsize) - 1) {
+        ssize_t n = read(client_fd, buffer + total_read, 1);
+        if (n < 0) {
+            perror("read");
+            return -1;
+        }
+        if (n == 0) {
+            break;
+        }
+        if (buffer[total_read] == '\n') {
+            total_read++;
+            break;
+        }
+        total_read++;
+    }
+    buffer[total_read] = '\0';
+    return total_read;
+}
+
+void handle_client(int client_fd) {
+    const size_t kBufSize = 1024;
+    char buffer[kBufSize];
+    ssize_t len = read_client_message(client_fd, buffer, kBufSize);
+    if (len <= 0) {
+        std::cerr << "Failed to read from client or client closed prematurely\n";
         return;
     }
-    std::cout << "Client connected\n";
-    close(client_fd);
-    close(listen_fd);
+    std::cout << "Received from client: " << buffer;
+    ssize_t sent = write(client_fd, buffer, len);
+    if (sent < 0) {
+        perror("write");
+    }
 }
 
 int main() {
