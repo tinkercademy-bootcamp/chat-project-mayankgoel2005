@@ -54,6 +54,11 @@ void wait_and_accept(int listen_fd) {
 }
 
 int main() {
-    std::cout << "Hello from server (placeholder)\n";
+    int listen_fd = create_listen_socket(8080);
+    if (listen_fd < 0) {
+        std::cerr << "Failed to create listening socket\n";
+        return 1;
+    }
+    wait_and_accept(listen_fd);
     return 0;
 }
