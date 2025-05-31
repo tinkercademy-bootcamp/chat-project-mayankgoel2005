@@ -34,6 +34,12 @@ int connect_to_server(const char* ip, int port) {
 }
 
 int main() {
-    std::cout << "Hello from client (placeholder)\n";
+    int sock = connect_to_server("127.0.0.1", 8080);
+    if (sock < 0) {
+        std::cerr << "Connection failed\n";
+        return 1;
+    }
+    std::cout << "Connected to server\n";
+    close(sock);
     return 0;
 }
