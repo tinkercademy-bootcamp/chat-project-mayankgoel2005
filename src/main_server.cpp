@@ -41,6 +41,18 @@ int create_listen_socket(int port) {
     return fd;
 }
 
+void wait_and_accept(int listen_fd) {
+    std::cout << "Server listening on port 8080\n";
+    int client_fd = accept(listen_fd, nullptr, nullptr);
+    if (client_fd < 0) {
+        perror("accept");
+        return;
+    }
+    std::cout << "Client connected\n";
+    close(client_fd);
+    close(listen_fd);
+}
+
 int main() {
     std::cout << "Hello from server (placeholder)\n";
     return 0;
