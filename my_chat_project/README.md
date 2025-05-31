@@ -1,0 +1,1 @@
+Starting point for a simple chat server/client
