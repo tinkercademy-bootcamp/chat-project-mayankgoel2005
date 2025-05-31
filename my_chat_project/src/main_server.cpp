@@ -80,9 +80,25 @@ void handle_client(int client_fd) {
 int main() {
     int listen_fd = create_listen_socket(8080);
     if (listen_fd < 0) {
-        std::cerr << "Failed to create listening socket\n";
+        std::cerr << "Failed to set up listening socket\n";
         return 1;
     }
-    wait_and_accept(listen_fd);
+
+    std::cout << "Server listening on port 8080\n";
+
+    while (true) {
+        int client_fd = accept(listen_fd, nullptr, nullptr);
+        if (client_fd < 0) {
+            perror("accept");
+            break;
+        }
+
+        std::cout << "Client connected\n";
+        handle_client(client_fd);
+        close(client_fd);
+        std::cout << "Client disconnected, waiting for next client...\n";
+    }
+
+    close(listen_fd);
     return 0;
 }
