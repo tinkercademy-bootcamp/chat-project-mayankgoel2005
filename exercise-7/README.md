@@ -10,8 +10,17 @@
 - https://github.com/joakimthun/io-uring-echo-server
 - https://man7.org/linux/man-pages/man7/epoll.7.html
 - What other resources can you find about epoll?
+  - "The Linux Programming Interface" book has a great chapter on epoll
+  - https://devarea.com/linux-io-multiplexing-select-vs-poll-vs-epoll/
+  - https://medium.com/@copyconstruct/the-method-to-epolls-madness-d9d2d6378642
+  - Stackoverflow's epoll examples and discussions
 - Are the above code repos examples of good code or bad code?
+  - `onestraw/epoll-example` is simple, but it doesn’t have much error handling or comments to explain what’s going on.
+  - `joakimthun/io-uring-echo-server` is better structured and shows how to use `io_uring`, but it mixes modern C++ with old-style C code.  
+  - Neither repo has proper testing or documentation, so they require a lot of work for using in a proper project. They useful for understanding the concepts, but not something I can directly copy for proper use.
 - How do you decide what is good code or bad code?
+  - Good code is easy to read, has comments, handles errors, has proper documentation, and is organized. 
+  - Bad code is hard to follow, messy, or missing important checks.
 
 ## Creating a Chat Client/Server Using EPOLL
 
