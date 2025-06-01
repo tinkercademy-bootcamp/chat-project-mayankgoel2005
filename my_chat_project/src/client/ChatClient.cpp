@@ -3,6 +3,7 @@
 #include <arpa/inet.h>
 #include <unistd.h>
 #include <netinet/in.h>
+#include <sys/select.h>
 #include <string>
 #include <cstring>
 
@@ -76,20 +77,55 @@ int main() {
         return 1;
     }
 
-    std::string msg = "Hello from client\n";
-    if (!send_message(sock, msg)) {
-        close(sock);
-        return 1;
-    }
-    std::cout << "Sent to server: " << msg;
+    std::cout << "Connected to server 127.0.0.1:8080\n";
+    std::cout << "Type messages and press Enter to send. Type 'quit' to exit.\n";
 
     const size_t kBufSize = 1024;
-    char buffer[kBufSize];
-    ssize_t len = read_server_message(sock, buffer, kBufSize);
-    if (len > 0) {
-        std::cout << "Echo from server: " << buffer;
-    } else {
-        std::cerr << "Failed to read echo or server closed connection\n";
+    char recvbuf[kBufSize];
+    char sendbuf[kBufSize];
+
+    while (true) {
+        fd_set readfds;
+        FD_ZERO(&readfds);
+        FD_SET(STDIN_FILENO, &readfds);
+        FD_SET(sock, &readfds);
+
+        int maxfd = (sock > STDIN_FILENO ? sock : STDIN_FILENO) + 1;
+        int ready = select(maxfd, &readfds, nullptr, nullptr, nullptr);
+        if (ready < 0) {
+            if (errno == EINTR) continue;
+            perror("select");
+            break;
+        }
+
+        if (FD_ISSET(STDIN_FILENO, &readfds)) {
+            if (!fgets(sendbuf, kBufSize, stdin)) {
+                std::cout << "Input closed, exiting.\n";
+                break;
+            }
+            if (std::strcmp(sendbuf, "quit\n") == 0) {
+                std::cout << "Quit command received, exiting.\n";
+                break;
+            }
+            size_t len = std::strlen(sendbuf);
+            if (len == 0 || sendbuf[len - 1] != '\n') {
+                sendbuf[len] = '\n';
+                sendbuf[len + 1] = '\0';
+            }
+            if (!send_message(sock, std::string(sendbuf))) {
+                std::cerr << "Failed to send message\n";
+                break;
+            }
+        }
+
+        if (FD_ISSET(sock, &readfds)) {
+            ssize_t n = read_server_message(sock, recvbuf, kBufSize);
+            if (n <= 0) {
+                std::cerr << "Server closed connection or read error\n";
+                break;
+            }
+            std::cout << "Server: " << recvbuf;
+        }
     }
 
     close(sock);

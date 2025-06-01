@@ -65,20 +65,6 @@ ssize_t read_client_message(int client_fd, char* buffer, size_t bufsize) {
     return total_read;
 }
 
-void handle_client(int client_fd) {
-    const size_t kBufSize = 1024;
-    char buffer[kBufSize];
-    ssize_t len = read_client_message(client_fd, buffer, kBufSize);
-    if (len <= 0) {
-        std::cerr << "Failed to read from client or client closed prematurely\n";
-        return;
-    }
-    std::cout << "Received from client: " << buffer;
-    ssize_t sent = write(client_fd, buffer, len);
-    if (sent < 0) {
-        perror("write");
-    }
-}
 
 int makeNonBlocking(int fd) {
     int flags = fcntl(fd, F_GETFL, 0);
@@ -95,6 +81,7 @@ int makeNonBlocking(int fd) {
 
 static constexpr int kPort      = 8080;
 static constexpr int kMaxEvents = 10;
+static constexpr int kBufSize   = 1024;
 
 int main() {
     int listen_fd = create_listen_socket(kPort);
@@ -163,7 +150,7 @@ int main() {
                     }
 
                     epoll_event client_ev{};
-                    client_ev.events = EPOLLIN | EPOLLET;
+                    client_ev.events = EPOLLIN;
                     client_ev.data.fd = client_fd;
                     if (epoll_ctl(epoll_fd, EPOLL_CTL_ADD, client_fd, &client_ev) < 0) {
                         perror("epoll_ctl: client_fd");
@@ -178,20 +165,31 @@ int main() {
                         ipbuf,
                         sizeof(ipbuf)
                     );
-                    std::cout << "Accepted connection from "
-                              << ipbuf << ":"
-                              << ntohs(client_addr.sin_port) << "\n";
+                    std::cout << "Accepted connection from " << ipbuf << ":" << ntohs(client_addr.sin_port) << " (fd=" << client_fd << ")\n";
                 }
             }
             else {
                 int client_fd = event_fd;
-                handle_client(client_fd);
 
-                if (epoll_ctl(epoll_fd, EPOLL_CTL_DEL, client_fd, nullptr) < 0) {
-                    perror("epoll_ctl: DEL client_fd");
+                char buffer[kBufSize];
+                ssize_t len = read_client_message(client_fd, buffer, kBufSize);
+
+                if (len > 0) {
+                    std::cout << "Received from client (fd=" << client_fd << "): " << buffer;
+                    ssize_t sent = write(client_fd, buffer, len);
+                    if (sent < 0) {
+                        perror("write");
+                    }
                 }
-                close(client_fd);
-                std::cout << "Client disconnected (fd=" << client_fd << ")\n";
+                else {
+                    if (len < 0) {
+                        std::cerr << "Error reading from client_fd " << client_fd << "\n";
+                    } else {
+                        std::cout << "Client closed connection (fd=" << client_fd << ")\n";
+                    }
+                    epoll_ctl(epoll_fd, EPOLL_CTL_DEL, client_fd, nullptr);
+                    close(client_fd);
+                }
             }
         }
     }
