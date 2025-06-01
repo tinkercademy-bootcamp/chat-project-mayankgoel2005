@@ -86,6 +86,8 @@ static constexpr int kBufSize   = 1024;
 
 int main() {
     std::unordered_map<int, std::string> client_usernames;
+    std::unordered_map<int, std::string> client_channels;
+    std::unordered_map<std::string, std::vector<int>> channels;
 
     int listen_fd = create_listen_socket(kPort);
     if (listen_fd < 0) {
@@ -211,7 +213,55 @@ int main() {
 
                 const std::string& username = client_usernames[client_fd];
                 std::cout << username << ": " << msg;
-                write(client_fd, msg.c_str(), msg.size());
+                if (msg == "/list\n") {
+                    std::string list;
+                    for (const auto& p : channels) {
+                        list += p.first + " ";
+                    }
+                    if (!list.empty() && list.back() == ' ') list.pop_back();
+                    list += "\n";
+                    write(client_fd, list.c_str(), list.size());
+                } else if (msg.rfind("/create ", 0) == 0) {
+                    std::string channel;
+                    size_t end = msg.find('\n', 8);
+                    if (end == std::string::npos) end = msg.size();
+                    channel = msg.substr(8, end - 8);
+                    channels[channel] = {};
+                    std::string reply = "Channel " + channel + " created\n";
+                    write(client_fd, reply.c_str(), reply.size());
+                } else if (msg.rfind("/join ", 0) == 0) {
+                    std::string channel;
+                    size_t end = msg.find('\n', 6);
+                    if (end == std::string::npos) end = msg.size();
+                    channel = msg.substr(6, end - 6);
+                    if (channels.count(channel)) {
+                        std::string prev = client_channels[client_fd];
+                        if (!prev.empty()) {
+                            auto& prev_vec = channels[prev];
+                            prev_vec.erase(std::remove(prev_vec.begin(), prev_vec.end(), client_fd), prev_vec.end());
+                        }
+                        channels[channel].push_back(client_fd);
+                        client_channels[client_fd] = channel;
+                        std::string reply = "Joined " + channel + "\n";
+                        write(client_fd, reply.c_str(), reply.size());
+                    } else {
+                        std::string reply = "Channel " + channel + " does not exist\n";
+                        write(client_fd, reply.c_str(), reply.size());
+                    }
+                } else {
+                    if (client_channels[client_fd].empty()) {
+                        std::string reply = "Join a channel first\n";
+                        write(client_fd, reply.c_str(), reply.size());
+                    } else {
+                        std::string channel = client_channels[client_fd];
+                        std::string fullmsg = username + ": " + msg;
+                        for (int fd : channels[channel]) {
+                            if (fd != client_fd) {
+                                write(fd, fullmsg.c_str(), fullmsg.size());
+                            }
+                        }
+                    }
+                }
             }
         }
     }
