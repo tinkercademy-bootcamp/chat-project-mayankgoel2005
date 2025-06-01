@@ -2,11 +2,15 @@
 
 This is a simple command-line chat server and client. Users can connect, register a username, join or create channels, and chat with each other in real time.
 
+**Note:** Usernames and channel names cannot contain spaces or tabs.
+
 ## Features
 
 1. **User Registration**
    - When you connect, first type a username (no spaces).
    - The server keeps track of who is connected.
+   - Usernames cannot contain spaces or tabs.
+   - Usernames must be unique (no duplicates).
 
 2. **Channels**
    - Create a channel with `/create <channel_name>`.
@@ -16,6 +20,8 @@ This is a simple command-line chat server and client. Users can connect, registe
    - See which channel you’re in with `/current`.
    - Delete an empty channel with `/delete <channel_name>`.
    - View who is in a channel with `/users <channel_name>`.
+   - When you join a channel, you first receive recent chat history from that channel.
+   - Channel names must be unique (no duplicates).
 
 3. **Chatting**
    - Once you’ve joined a channel, type any message (press Enter) to send it.
@@ -115,3 +121,5 @@ This is a simple command-line chat server and client. Users can connect, registe
 - If you try to delete a channel that still has users, the server refuses.
 - The server automatically removes idle clients after 60 seconds of no activity.
 - Everything happens in the terminal—no GUI needed.
+
+New users see prior channel messages on join (history).

@@ -241,6 +241,15 @@ int main() {
                         write(client_fd, reply.c_str(), reply.size());
                         continue;
                     }
+                    bool exists = false;
+                    for (const auto& kv : client_usernames) {
+                        if (kv.second == msg) { exists = true; break; }
+                    }
+                    if (exists) {
+                        std::string reply = "Username already exists\n";
+                        write(client_fd, reply.c_str(), reply.size());
+                        continue;
+                    }
                     client_usernames[client_fd] = msg;
                     std::cout << "Registered username '" << msg 
                               << "' for fd=" << client_fd << "\n";
