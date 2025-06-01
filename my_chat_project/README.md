@@ -41,11 +41,14 @@ This is a simple command-line chat server and client. Users can connect, registe
 7. **Help**
    - Show a list of available commands with `/help`.
 
-8. **Keepalive**
+8. **Announcements**
+   - Broadcast a message to all users with `/announcement <text>`.
+
+9. **Keepalive**
    - The server automatically disconnects you if you’re idle (no messages or commands) for more than 60 seconds.
    - You can also manually check if the server is still there by typing `/ping`. The server replies with `/pong`.
 
-9. **Quit**
+10. **Quit**
    - Disconnect cleanly from the server with `/quit`.
 
 ## How to Run
@@ -113,6 +116,7 @@ This is a simple command-line chat server and client. Users can connect, registe
    - `/help` → prints all commands.
    - `/quit` → disconnects from the server.
    - `/ping` → server replies with `/pong` (keeps you from timing out).
+   - `/announcement <text>` - broadcast a message to all users.
 
 ## Notes
 
@@ -121,5 +125,4 @@ This is a simple command-line chat server and client. Users can connect, registe
 - If you try to delete a channel that still has users, the server refuses.
 - The server automatically removes idle clients after 60 seconds of no activity.
 - Everything happens in the terminal—no GUI needed.
-
-New users see prior channel messages on join (history).
+- New users see prior channel messages on join (history).

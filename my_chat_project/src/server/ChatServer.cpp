@@ -429,6 +429,7 @@ int main() {
                         "/who          - list all users\n"
                         "/users <c>    - list users in channel c\n"
                         "/help         - show commands\n"
+                        "/announcement <text> - send announcement to all users\n"
                         "/ping         - ping server\n"
                         "/quit         - disconnect\n";
                     write(client_fd, help.c_str(), help.size());
@@ -453,6 +454,18 @@ int main() {
                         std::string reply = "Channel " + channel + " does not exist\n";
                         write(client_fd, reply.c_str(), reply.size());
                     }
+                } else if (msg.rfind("/announcement ", 0) == 0) {
+                    std::string text = msg.substr(14);
+                    if (!text.empty() && text.back() == '\n') text.pop_back();
+                    std::string note = "[Announcement from " + username + "] " + text + "\n";
+                    for (const auto& kv : client_usernames) {
+                        int fd = kv.first;
+                        write(fd, note.c_str(), note.size());
+                    }
+                } else if (msg == "/quit\n") {
+                    epoll_ctl(epoll_fd, EPOLL_CTL_DEL, client_fd, nullptr);
+                    client_usernames.erase(client_fd);
+                    close(client_fd);
                 } else {
                     if (client_channels[client_fd].empty()) {
                         std::string reply = "Join a channel first\n";

@@ -103,10 +103,6 @@ int main() {
                 std::cout << "Input closed, exiting.\n";
                 break;
             }
-            if (std::strcmp(sendbuf, "/quit\n") == 0) {
-                std::cout << "Quit command received, exiting.\n";
-                break;
-            }
             size_t len = std::strlen(sendbuf);
             if (len == 0 || sendbuf[len - 1] != '\n') {
                 sendbuf[len] = '\n';
