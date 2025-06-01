@@ -126,6 +126,33 @@ int main() {
     std::vector<epoll_event> events(kMaxEvents);
     while (true) {
         int n = epoll_wait(epoll_fd, events.data(), kMaxEvents, -1);
+
+        time_t now = time(NULL);
+        std::vector<int> to_remove;
+        for (auto& kv : last_pong) {
+            int fd = kv.first;
+            time_t t = kv.second;
+            if (now - t > 60) {
+                to_remove.push_back(fd);
+            }
+        }
+        for (int fd : to_remove) {
+            std::string user = client_usernames[fd];
+            std::string oldchan = client_channels[fd];
+            if (!oldchan.empty()) {
+                auto& vec = channels[oldchan];
+                vec.erase(std::remove(vec.begin(), vec.end(), fd), vec.end());
+                std::string note = "[Server] " + user + " timed out and left " + oldchan + "\n";
+                for (int other : channels[oldchan]) {
+                    write(other, note.c_str(), note.size());
+                }
+            }
+            epoll_ctl(epoll_fd, EPOLL_CTL_DEL, fd, nullptr);
+            client_usernames.erase(fd);
+            client_channels.erase(fd);
+            last_pong.erase(fd);
+            close(fd);
+        }
         if (n < 0) {
             if (errno == EINTR) continue;
             perror("epoll_wait");
@@ -202,6 +229,8 @@ int main() {
                 }
 
                 std::string msg(buffer);
+
+                last_pong[client_fd] = time(NULL);
 
                 if (client_usernames[client_fd].empty()) {
                     if (!msg.empty() && msg.back() == '\n') {
