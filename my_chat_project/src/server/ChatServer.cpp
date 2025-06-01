@@ -236,6 +236,11 @@ int main() {
                     if (!msg.empty() && msg.back() == '\n') {
                         msg.pop_back();
                     }
+                    if (msg.find(' ') != std::string::npos || msg.find('\t') != std::string::npos) {
+                        std::string reply = "Username cannot contain spaces or tabs\n";
+                        write(client_fd, reply.c_str(), reply.size());
+                        continue;
+                    }
                     client_usernames[client_fd] = msg;
                     std::cout << "Registered username '" << msg 
                               << "' for fd=" << client_fd << "\n";
@@ -259,6 +264,11 @@ int main() {
                     size_t end = msg.find('\n', 8);
                     if (end == std::string::npos) end = msg.size();
                     channel = msg.substr(8, end - 8);
+                    if (channel.find(' ') != std::string::npos || channel.find('\t') != std::string::npos) {
+                        std::string reply = "Channel names cannot contain spaces or tabs\n";
+                        write(client_fd, reply.c_str(), reply.size());
+                        continue;
+                    }
                     if (channels.count(channel)) {
                         std::string reply = "Channel " + channel + " already exists\n";
                         write(client_fd, reply.c_str(), reply.size());
@@ -273,6 +283,11 @@ int main() {
                     size_t end = msg.find('\n', 6);
                     if (end == std::string::npos) end = msg.size();
                     channel = msg.substr(6, end - 6);
+                    if (channel.find(' ') != std::string::npos || channel.find('\t') != std::string::npos) {
+                        std::string reply = "Channel names cannot contain spaces or tabs\n";
+                        write(client_fd, reply.c_str(), reply.size());
+                        continue;
+                    }
                     if (channels.count(channel)) {
                         for (const auto& line : history[channel]) {
                             write(client_fd, line.c_str(), line.size());
@@ -324,6 +339,11 @@ int main() {
                     size_t end = msg.find('\n', 8);
                     if (end == std::string::npos) end = msg.size();
                     newname = msg.substr(8, end - 8);
+                    if (newname.find(' ') != std::string::npos || newname.find('\t') != std::string::npos) {
+                        std::string reply = "Username cannot contain spaces or tabs\n";
+                        write(client_fd, reply.c_str(), reply.size());
+                        continue;
+                    }
                     bool exists = false;
                     for (const auto& kv : client_usernames) {
                         if (kv.second == newname) { exists = true; break; }
@@ -341,6 +361,11 @@ int main() {
                     size_t end = msg.find('\n', 8);
                     if (end == std::string::npos) end = msg.size();
                     channel = msg.substr(8, end - 8);
+                    if (channel.find(' ') != std::string::npos || channel.find('\t') != std::string::npos) {
+                        std::string reply = "Channel names cannot contain spaces or tabs\n";
+                        write(client_fd, reply.c_str(), reply.size());
+                        continue;
+                    }
                     if (!channels.count(channel)) {
                         std::string reply = "Channel " + channel + " does not exist\n";
                         write(client_fd, reply.c_str(), reply.size());
