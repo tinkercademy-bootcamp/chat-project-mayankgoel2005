@@ -78,7 +78,7 @@ int main() {
     }
 
     std::cout << "Connected to server 127.0.0.1:8080\n";
-    std::cout << "Type messages and press Enter to send. Type 'quit' to exit.\n";
+    std::cout << "First, Type in your Username. Then, type in messages and press Enter to send. Type 'quit' to exit.\n";
 
     const size_t kBufSize = 1024;
     char recvbuf[kBufSize];

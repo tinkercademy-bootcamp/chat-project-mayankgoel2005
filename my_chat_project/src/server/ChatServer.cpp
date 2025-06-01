@@ -1,5 +1,6 @@
 #include <iostream>
 #include <vector>
+#include <unordered_map>
 #include <sys/epoll.h>
 #include <sys/socket.h>
 #include <fcntl.h>
@@ -84,6 +85,8 @@ static constexpr int kMaxEvents = 10;
 static constexpr int kBufSize   = 1024;
 
 int main() {
+    std::unordered_map<int, std::string> client_usernames;
+
     int listen_fd = create_listen_socket(kPort);
     if (listen_fd < 0) {
         std::cerr << "Failed to set up listening socket\n";
@@ -149,11 +152,13 @@ int main() {
                         continue;
                     }
 
+                    client_usernames[client_fd] = "";
                     epoll_event client_ev{};
                     client_ev.events = EPOLLIN;
                     client_ev.data.fd = client_fd;
                     if (epoll_ctl(epoll_fd, EPOLL_CTL_ADD, client_fd, &client_ev) < 0) {
                         perror("epoll_ctl: client_fd");
+                        client_usernames.erase(client_fd);
                         close(client_fd);
                         continue;
                     }
@@ -165,31 +170,48 @@ int main() {
                         ipbuf,
                         sizeof(ipbuf)
                     );
-                    std::cout << "Accepted connection from " << ipbuf << ":" << ntohs(client_addr.sin_port) << " (fd=" << client_fd << ")\n";
+                    std::cout << "Accepted connection from " 
+                              << ipbuf << ":" << ntohs(client_addr.sin_port)
+                              << " (fd=" << client_fd << ")\n";
+                    std::cout << "  Waiting for username...\n";
                 }
             }
             else {
                 int client_fd = event_fd;
-
                 char buffer[kBufSize];
                 ssize_t len = read_client_message(client_fd, buffer, kBufSize);
 
-                if (len > 0) {
-                    std::cout << "Received from client (fd=" << client_fd << "): " << buffer;
-                    ssize_t sent = write(client_fd, buffer, len);
-                    if (sent < 0) {
-                        perror("write");
-                    }
-                }
-                else {
+                if (len <= 0) {
                     if (len < 0) {
-                        std::cerr << "Error reading from client_fd " << client_fd << "\n";
+                        std::cerr << "Error reading from client_fd " 
+                                  << client_fd << "\n";
                     } else {
-                        std::cout << "Client closed connection (fd=" << client_fd << ")\n";
+                        std::cout << "Client closed connection (fd=" 
+                                  << client_fd << ")\n";
                     }
                     epoll_ctl(epoll_fd, EPOLL_CTL_DEL, client_fd, nullptr);
+                    client_usernames.erase(client_fd);
                     close(client_fd);
+                    continue;
                 }
+
+                std::string msg(buffer);
+
+                if (client_usernames[client_fd].empty()) {
+                    if (!msg.empty() && msg.back() == '\n') {
+                        msg.pop_back();
+                    }
+                    client_usernames[client_fd] = msg;
+                    std::cout << "Registered username '" << msg 
+                              << "' for fd=" << client_fd << "\n";
+                    std::string welcome = "Welcome, " + msg + "\n";
+                    write(client_fd, welcome.c_str(), welcome.size());
+                    continue;
+                }
+
+                const std::string& username = client_usernames[client_fd];
+                std::cout << username << ": " << msg;
+                write(client_fd, msg.c_str(), msg.size());
             }
         }
     }
