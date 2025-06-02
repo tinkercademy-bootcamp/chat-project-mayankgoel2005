@@ -11,6 +11,7 @@
 #include <cstring>
 #include <deque>
 #include <ctime>
+#include <algorithm>
 
 void handleList(int client_fd, const std::unordered_map<std::string, std::vector<int>>& channels);
 void handleJoin(int client_fd, const std::string& msg, std::unordered_map<int, std::string>& client_channels,
