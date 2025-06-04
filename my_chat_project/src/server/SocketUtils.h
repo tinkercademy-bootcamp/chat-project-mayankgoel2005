@@ -12,3 +12,5 @@ int create_listen_socket(int port);
 ssize_t read_client_message(int client_fd, char* buffer, size_t bufsize);
 
 int makeNonBlocking(int fd);
+
+bool setupListener(int port, int &listen_fd, int &epoll_fd);

@@ -1,12 +1,13 @@
 #include "SocketUtils.h"
 #include <sys/socket.h>
 #include <netinet/in.h>
+#include <sys/epoll.h>
+#include <arpa/inet.h>
 #include <unistd.h>
 #include <fcntl.h>
 #include <cstring>
 #include <iostream>
 
-// Exactly the same bodies you had in ChatServer.cpp:
 
 int create_listen_socket(int port) {
     int fd = socket(AF_INET, SOCK_STREAM, 0);
@@ -75,4 +76,38 @@ int makeNonBlocking(int fd) {
         return -1;
     }
     return 0;
+}
+
+bool setupListener(int port, int &listen_fd, int &epoll_fd) {
+    listen_fd = create_listen_socket(port);
+    if (listen_fd < 0) {
+        std::cerr << "Failed to set up listening socket\n";
+        return false;
+    }
+
+    if (makeNonBlocking(listen_fd) < 0) {
+        close(listen_fd);
+        return false;
+    }
+
+    std::cout << "Server listening on port " << port << "\n";
+
+    epoll_fd = epoll_create1(0);
+    if (epoll_fd < 0) {
+        perror("epoll_create1");
+        close(listen_fd);
+        return false;
+    }
+
+    epoll_event ev{};
+    ev.events = EPOLLIN;
+    ev.data.fd = listen_fd;
+    if (epoll_ctl(epoll_fd, EPOLL_CTL_ADD, listen_fd, &ev) < 0) {
+        perror("epoll_ctl: listen_fd");
+        close(listen_fd);
+        close(epoll_fd);
+        return false;
+    }
+
+    return true;
 }

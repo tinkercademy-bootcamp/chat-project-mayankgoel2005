@@ -15,12 +15,6 @@
 #include "CommandHandlers.h"
 #include "SocketUtils.h"
 
-void handleTimeouts(std::unordered_map<int, std::string>& client_usernames,
-                    std::unordered_map<int, std::string>& client_channels,
-                    std::unordered_map<std::string, std::vector<int>>& channels,
-                    std::unordered_map<int, time_t>& last_pong,
-                    int epoll_fd,
-                    int timeout_seconds);
 
 static constexpr int kPort      = 8080;
 static constexpr int kMaxEvents = 10;
@@ -33,33 +27,8 @@ int main() {
     std::unordered_map<std::string, std::deque<std::string>> history;
     std::unordered_map<int, time_t> last_pong;
 
-    int listen_fd = create_listen_socket(kPort);
-    if (listen_fd < 0) {
-        std::cerr << "Failed to set up listening socket\n";
-        return 1;
-    }
-
-    if (makeNonBlocking(listen_fd) < 0) {
-        close(listen_fd);
-        return 1;
-    }
-
-    std::cout << "Server listening on port " << kPort << "\n";
-
-    int epoll_fd = epoll_create1(0);
-    if (epoll_fd < 0) {
-        perror("epoll_create1");
-        close(listen_fd);
-        return 1;
-    }
-
-    epoll_event ev{};
-    ev.events = EPOLLIN;
-    ev.data.fd = listen_fd;
-    if (epoll_ctl(epoll_fd, EPOLL_CTL_ADD, listen_fd, &ev) < 0) {
-        perror("epoll_ctl: listen_fd");
-        close(listen_fd);
-        close(epoll_fd);
+    int listen_fd, epoll_fd;
+    if (!setupListener(kPort, listen_fd, epoll_fd)) {
         return 1;
     }
 
@@ -68,7 +37,7 @@ int main() {
         int n = epoll_wait(epoll_fd, events.data(), kMaxEvents, -1);
 
         handleTimeouts(client_usernames, client_channels, channels, last_pong, epoll_fd, 60);
-        
+
         if (n < 0) {
             if (errno == EINTR) continue;
             perror("epoll_wait");
