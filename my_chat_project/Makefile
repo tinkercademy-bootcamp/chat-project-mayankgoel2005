@@ -5,7 +5,8 @@ BUILD_DIR := build
 SRC_DIR   := src
 
 SERVER_SRCS := $(SRC_DIR)/server/ChatServer.cpp \
-               $(SRC_DIR)/server/CommandHandlers.cpp
+               $(SRC_DIR)/server/CommandHandlers.cpp \
+			   $(SRC_DIR)/server/SocketUtils.cpp
 
 CLIENT_SRC := $(SRC_DIR)/client/ChatClient.cpp
 
