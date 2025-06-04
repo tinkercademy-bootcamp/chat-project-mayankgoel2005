@@ -6,6 +6,13 @@
 #include <deque>
 #include <ctime>
 
+void handleTimeouts(std::unordered_map<int, std::string>& client_usernames,
+                    std::unordered_map<int, std::string>& client_channels,
+                    std::unordered_map<std::string, std::vector<int>>& channels,
+                    std::unordered_map<int, time_t>& last_pong,
+                    int epoll_fd,
+                    int timeout_seconds);
+
 void handleList(int client_fd,
                 const std::unordered_map<std::string, std::vector<int>>& channels);
 

@@ -4,6 +4,40 @@
 #include <cstring>
 #include <sys/epoll.h>
 
+void handleTimeouts(std::unordered_map<int, std::string>& client_usernames,
+                    std::unordered_map<int, std::string>& client_channels,
+                    std::unordered_map<std::string, std::vector<int>>& channels,
+                    std::unordered_map<int, time_t>& last_pong,
+                    int epoll_fd,
+                    int timeout_seconds) {
+    time_t now = time(NULL);
+    std::vector<int> to_remove;
+    for (auto& kv : last_pong) {
+        int fd = kv.first;
+        time_t t = kv.second;
+        if (now - t > timeout_seconds) {
+            to_remove.push_back(fd);
+        }
+    }   
+    for (int fd : to_remove) {
+        std::string user = client_usernames[fd];
+        std::string oldchan = client_channels[fd];
+        if (!oldchan.empty()) {
+            auto& vec = channels[oldchan];
+            vec.erase(std::remove(vec.begin(), vec.end(), fd), vec.end());
+            std::string note = "[Server] " + user + " timed out and left " + oldchan + "\n";
+            for (int other : channels[oldchan]) {
+                write(other, note.c_str(), note.size());
+            }
+        }
+        epoll_ctl(epoll_fd, EPOLL_CTL_DEL, fd, nullptr);
+        client_usernames.erase(fd);
+        client_channels.erase(fd);
+        last_pong.erase(fd);
+        close(fd);
+    }
+}
+
 void handleList(int client_fd, const std::unordered_map<std::string, std::vector<int>>& channels) {
     std::string list;
     for (const auto& p : channels) {
